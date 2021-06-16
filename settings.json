@@ -1,0 +1,17 @@
+{
+	"commands":[
+		"/info",
+		"/help"
+	],
+
+	"urls":[
+		{
+			"text" : "Netheru",
+			"url" : "https://netheru.io/it/home/"
+		},
+		{
+			"text" : "White Paper",
+			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
+		}
+	]
+}
