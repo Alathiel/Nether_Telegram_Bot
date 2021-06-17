@@ -7,7 +7,7 @@ bot.command('start', ctx => {
     console.log(ctx.from)
     bot.telegram.sendMessage(ctx.chat.id, 'Hello, Welcome to Nether Help bot', {})
 	send_urls(ctx);
-})
+}) 
 
 
 bot.command('info', ctx => {
