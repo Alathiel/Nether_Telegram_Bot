@@ -1,8 +1,9 @@
 {
 	"commands":[
-		"/info",
-		"/help"
+		"/info"
 	],
+
+	"delete_time" : 5,
 
 	"urls":[
 		{
