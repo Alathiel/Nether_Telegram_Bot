@@ -23,12 +23,51 @@ member - if is a new member and his name
 new message - if it's a welcome message
 */
 async function send_urls(ctx, member = null, new_message = null){
+	list = load_list(settings.urls);
+	let message = 'Here you can read info about Nether';
+	if(member !== null)
+		message = 'Welcome '+member.first_name+'\n'+message;
+	if(new_message !== null)
+		message = new_message+"\n"+message;
+	try{
+		let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
+		//if it's a group
+		if(ctx.chat.type !== 'private'){
+			if(role.status == "administrator" || role.status === "creator"){
+				bot.telegram.sendMessage(ctx.chat.id, message, {
+					reply_markup: {
+						inline_keyboard: list
+					}
+				}).then((mess) => {
+					setTimeout(() => {
+						bot.telegram.deleteMessage(ctx.chat.id,mess.message_id);
+						bot.telegram.deleteMessage(ctx.chat.id, ctx.update.message.message_id);
+					}, settings.delete_time*1000)
+				}).catch(err => console.log(err));
+			}
+			else{
+				bot.telegram.sendMessage(ctx.chat.id, 'You can\'t use this command because you\'re not an Admin',{})
+			}
+		}
+		//if it's a private chat
+		else{
+			bot.telegram.sendMessage(ctx.chat.id, message, {
+				reply_markup: {
+					inline_keyboard: list
+				}
+			})
+		}
+	}
+	catch(error){
+		console.error(error);
+	}
+}
+
+function load_list(urls){
 	var list = [];
 	var list_app = [];
 	var i = 0;
-	settings.urls.forEach(element => {	
-		console.log(list_app);
-		console.log(i);
+	urls.forEach(element => {
 		if(i == 0){
 			list.push([{
 				text: element.text,
@@ -68,47 +107,9 @@ async function send_urls(ctx, member = null, new_message = null){
 		}
 
 	});
-	console.log(list_app);
 	if(list_app.length>0)
 		list.push(list_app);
-	console.log(list);
-	let message = 'Here you can read info about Nether';
-	if(member !== null)
-		message = 'Welcome '+member.first_name+'\n'+message;
-	if(new_message !== null)
-		message = new_message+"\n"+message;
-	try{
-		let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
-		//if it's a group
-		if(ctx.chat.type !== 'private'){
-			if(role.status == "administrator" || role.status === "creator"){
-				bot.telegram.sendMessage(ctx.chat.id, message, {
-					reply_markup: {
-						inline_keyboard: list
-					}
-				}).then((mess) => {
-					setTimeout(() => {
-						bot.telegram.deleteMessage(ctx.chat.id,mess.message_id);
-						bot.telegram.deleteMessage(ctx.chat.id, ctx.update.message.message_id);
-					}, settings.delete_time*1000)
-				}).catch(err => console.log(err));
-			}
-			else{
-				bot.telegram.sendMessage(ctx.chat.id, 'You can\'t use this command because you\'re not an Admin',{})
-			}
-		}
-		//if it's a private chat
-		else{
-			bot.telegram.sendMessage(ctx.chat.id, message, {
-				reply_markup: {
-					inline_keyboard: list
-				}
-			})
-		}
-	}
-	catch(error){
-		console.error(error);
-	}
+	return list;
 }
 
 
