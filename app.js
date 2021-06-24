@@ -24,12 +24,53 @@ new message - if it's a welcome message
 */
 async function send_urls(ctx, member = null, new_message = null){
 	var list = [];
+	var list_app = [];
+	var i = 0;
 	settings.urls.forEach(element => {	
-		list.push([{
-			text: element.text,
-			url: element.url
-		}])
+		console.log(list_app);
+		console.log(i);
+		if(i == 0){
+			list.push([{
+				text: element.text,
+				url: element.url
+			}]);
+			i++;
+		}
+		else if(i > 0 && i <= 3){
+			list_app.push({
+				text: element.text,
+				url: element.url
+			})
+			i++;
+		}
+		else if(i > 4 && i <= 5){
+			list_app.push({
+				text: element.text,
+				url: element.url
+			})
+			i++;
+		}
+		else if(i > 6 && i <= 7){
+			list_app.push({
+				text: element.text,
+				url: element.url
+			})
+			i++;
+		}
+		else if(i >= 4){
+			list.push(list_app);
+			list_app = [];
+			list_app.push({
+				text: element.text,
+				url: element.url
+			})
+			i++;
+		}
+
 	});
+	console.log(list_app);
+	if(list_app.length>0)
+		list.push(list_app);
 	console.log(list);
 	let message = 'Here you can read info about Nether';
 	if(member !== null)
