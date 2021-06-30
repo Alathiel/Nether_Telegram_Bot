@@ -24,7 +24,7 @@ new message - if it's a welcome message
 */
 async function send_urls(ctx, member = null, new_message = null){
 	list = load_list(settings.urls);
-	let message = 'Here you can read info about Nether';
+	let message =' <b> Here you can read info about Nether </b>';
 	if(member !== null)
 		message = 'Welcome '+member.first_name+'\n'+message;
 	if(new_message !== null)
@@ -34,7 +34,8 @@ async function send_urls(ctx, member = null, new_message = null){
 		//if it's a group
 		if(ctx.chat.type !== 'private'){
 			if(role.status == "administrator" || role.status === "creator"){
-				bot.telegram.sendMessage(ctx.chat.id, message, {
+				bot.telegram.sendMessage(ctx.chat.id, message, markup,{
+					parseMode: 'HTML',
 					reply_markup: {
 						inline_keyboard: list
 					}
@@ -52,6 +53,7 @@ async function send_urls(ctx, member = null, new_message = null){
 		//if it's a private chat
 		else{
 			bot.telegram.sendMessage(ctx.chat.id, message, {
+				parse_mode: 'HTML',
 				reply_markup: {
 					inline_keyboard: list
 				}
