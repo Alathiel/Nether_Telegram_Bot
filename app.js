@@ -3,6 +3,7 @@ const {Telegraf} = require('telegraf');
 const bot = new Telegraf(process.env.bot_token);
 settings = require('./settings.json');
 var CronJob = require('cron').CronJob;
+var job = null;
 
 bot.command('start', (ctx) => {
 	send_urls(ctx,null, 'Hello, Welcome to Nether Help bot');
@@ -26,10 +27,11 @@ bot.on('new_chat_members', function(message) {
 })
 
 function cron(ctx){
-	var job = new CronJob('0 */10 * * * *', function() {
-		bot.telegram.sendMessage(ctx.chat.id, "message", {})
+	job = new CronJob('0 */10 * * * *', function() {
+		send_urls(ctx);
 	}, null, true, 'America/Los_Angeles');
 
+	job.stop();
 	job.start();
 }
 	
