@@ -2,13 +2,21 @@ require('dotenv').config()
 const {Telegraf} = require('telegraf');
 const bot = new Telegraf(process.env.bot_token);
 settings = require('./settings.json');
+var CronJob = require('cron').CronJob;
 
 bot.command('start', (ctx) => {
 	send_urls(ctx,null, 'Hello, Welcome to Nether Help bot');
+	
 }) 
 
 bot.command('info', ctx => {
 	send_urls(ctx);
+})
+
+bot.command('cron', async function(ctx){
+	let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
+	if(ctx.chat.type !== 'private' && (role.status == "administrator" || role.status === "creator"))
+		cron(ctx);
 })
 
 bot.on('new_chat_members', function(message) {
@@ -16,6 +24,15 @@ bot.on('new_chat_members', function(message) {
 	if(message.update.message.new_chat_member.is_bot === false) // send message if not a bot
 		send_urls(message, message.update.message.new_chat_member);
 })
+
+function cron(ctx){
+	var job = new CronJob('0 */10 * * * *', function() {
+		bot.telegram.sendMessage(ctx.chat.id, "message", {})
+	}, null, true, 'America/Los_Angeles');
+
+	job.start();
+}
+	
 
 /*
 ctx - context
@@ -113,7 +130,6 @@ function load_list(urls){
 		list.push(list_app);
 	return list;
 }
-
 
 bot.launch();
 
