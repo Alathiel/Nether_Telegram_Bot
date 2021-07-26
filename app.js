@@ -26,6 +26,13 @@ bot.on('new_chat_members', function(message) {
 		send_urls(message, message.update.message.new_chat_member);
 })
 
+bot.on('message', function(message){
+	for(word in settings.blacklist){
+		if((message.update.message.text).toLowerCase() === settings.blacklist[word])
+		bot.telegram.deleteMessage(message.update.message.chat.id, message.update.message.message_id);
+	}
+})
+
 function cron(ctx){
 	job = new CronJob('0 */10 * * * *', function() {
 		send_urls(ctx);

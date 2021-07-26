@@ -42,5 +42,14 @@
 			"text" : "ccc",
 			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
 		}
-	]
+	],
+
+	"blacklist":[
+		"hi",
+		"hello",
+		"nice project",
+		"good project",
+		"great project",
+		"nice"
+	] 
 }
