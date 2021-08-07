@@ -14,6 +14,10 @@ bot.command('info', ctx => {
 	send_urls(ctx);
 })
 
+bot.command('infoPvt', ctx => {
+	send_urls(ctx,null,null,true);
+})
+
 bot.command('cron', async function(ctx){
 	let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
 	if(ctx.chat.type !== 'private' && (role.status == "administrator" || role.status === "creator"))
@@ -48,46 +52,55 @@ ctx - context
 member - if is a new member and his name
 new message - if it's a welcome message
 */
-async function send_urls(ctx, member = null, new_message = null){
+async function send_urls(ctx, member = null, new_message = null, private = false){
 	list = load_list(settings.urls);
 	let message =' <b> Here you can read info about Nether </b>';
-	if(member !== null)
-		message = 'Welcome '+member.first_name+'\n'+message;
-	if(new_message !== null)
-		message = new_message+"\n"+message;
-	try{
-		let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
-		//if it's a group
-		if(ctx.chat.type !== 'private'){
-			if(role.status == "administrator" || role.status === "creator"){
-				bot.telegram.sendMessage(ctx.chat.id, message, markup,{
-					parseMode: 'HTML',
+	if(!private){
+		if(member !== null)
+			message = 'Welcome '+member.first_name+'\n'+message;
+		if(new_message !== null)
+			message = new_message+"\n"+message;
+		try{
+			let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
+			//if it's a group
+			if(ctx.chat.type !== 'private'){
+				if(role.status == "administrator" || role.status === "creator"){
+					bot.telegram.sendMessage(ctx.chat.id, message, markup,{
+						parseMode: 'HTML',
+						reply_markup: {
+							inline_keyboard: list
+						}
+					}).then((mess) => {
+						setTimeout(() => {
+							bot.telegram.deleteMessage(ctx.chat.id,mess.message_id);
+							bot.telegram.deleteMessage(ctx.chat.id, ctx.update.message.message_id);
+						}, settings.delete_time*1000)
+					}).catch(err => console.log(err));
+				}
+				else{
+					bot.telegram.sendMessage(ctx.chat.id, 'You can\'t use this command because you\'re not an Admin',{})
+				}
+			}
+			//if it's a private chat
+			else{
+				bot.telegram.sendMessage(ctx.chat.id, message, {
+					parse_mode: 'HTML',
 					reply_markup: {
 						inline_keyboard: list
 					}
-				}).then((mess) => {
-					setTimeout(() => {
-						bot.telegram.deleteMessage(ctx.chat.id,mess.message_id);
-						bot.telegram.deleteMessage(ctx.chat.id, ctx.update.message.message_id);
-					}, settings.delete_time*1000)
-				}).catch(err => console.log(err));
-			}
-			else{
-				bot.telegram.sendMessage(ctx.chat.id, 'You can\'t use this command because you\'re not an Admin',{})
+				})
 			}
 		}
-		//if it's a private chat
-		else{
-			bot.telegram.sendMessage(ctx.chat.id, message, {
-				parse_mode: 'HTML',
-				reply_markup: {
-					inline_keyboard: list
-				}
-			})
+		catch(error){
+			console.error(error);
 		}
-	}
-	catch(error){
-		console.error(error);
+	} else{
+		bot.telegram.sendMessage(ctx.update.message.from.id, message, {
+			parse_mode: 'HTML',
+			reply_markup: {
+				inline_keyboard: list
+			}
+		})
 	}
 }
 
