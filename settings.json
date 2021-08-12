@@ -1,8 +1,4 @@
 {
-	"commands":[
-		"/info"
-	],
-
 	"delete_time" : 5,
 
 	"urls":[

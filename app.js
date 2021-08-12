@@ -1,13 +1,14 @@
 require('dotenv').config()
 const {Telegraf} = require('telegraf');
-const bot = new Telegraf(process.env.bot_token);
+const CronJob = require('cron').CronJob;
+const moment = require('moment');
 settings = require('./settings.json');
-var CronJob = require('cron').CronJob;
+
+const bot = new Telegraf(process.env.bot_token);
 var job = null;
 
 bot.command('start', (ctx) => {
 	send_urls(ctx,null, 'Hello, Welcome to Nether Help bot');
-	
 }) 
 
 bot.command('info', ctx => {
@@ -22,6 +23,39 @@ bot.command('cron', async function(ctx){
 	let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
 	if(ctx.chat.type !== 'private' && (role.status == "administrator" || role.status === "creator"))
 		cron(ctx);
+	
+})
+
+bot.command('mute', async function(ctx){
+	let role = await bot.telegram.getChatMember(ctx.chat.id, ctx.from.id);
+	if(ctx.chat.type !== 'private' && (role.status == "administrator" || role.status === "creator")){
+		const message = 'You have been restricted from sending messages for 12 hours.'
+		const ChatPermissions = {
+			"can_send_messages": false,
+			"can_send_media_messages": false,
+			"can_send_other_messages": false,
+			"can_add_web_page_previews": false,
+			"can_send_polls": false,
+			"can_change_info": false,
+			"can_invite_users": false,
+			"can_pin_messages": false
+		}
+		
+		try{
+		const date = ctx.update.message.date;
+			release = moment.unix(date).add(12,'hour');
+			const payload = {
+				chat_id: ctx.chat.id,
+				user_id: ctx.update.message.reply_to_message.from.id,
+				permissions: ChatPermissions,
+				until_date: release.unix()
+			}
+			ctx.telegram.callApi('restrictChatMember', payload);
+			bot.telegram.sendMessage(ctx.update.message.reply_to_message.from.id, message);
+		}catch(err){
+			console.error(err);
+		}
+	}
 })
 
 bot.on('new_chat_members', function(message) {
@@ -32,8 +66,10 @@ bot.on('new_chat_members', function(message) {
 
 bot.on('message', function(message){
 	for(word in settings.blacklist){
-		if((message.update.message.text).toLowerCase() === settings.blacklist[word])
-		bot.telegram.deleteMessage(message.update.message.chat.id, message.update.message.message_id);
+		try{
+			if((message.update.message.text).toLowerCase() === settings.blacklist[word])
+				bot.telegram.deleteMessage(message.update.message.chat.id, message.update.message.message_id);
+		}catch(err){console.error(err);}
 	}
 })
 
