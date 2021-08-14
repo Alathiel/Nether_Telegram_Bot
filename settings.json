@@ -1,4 +1,11 @@
 {
+	"commands":[
+		{"command":"info", "description":"insert description here"},
+		{"command":"info_pvt", "description":"insert description here"},
+		{"command":"cron", "description":"insert description here"},
+		{"command":"mute", "description":"insert description here"}
+	],
+
 	"delete_time" : 5,
 
 	"urls":[
