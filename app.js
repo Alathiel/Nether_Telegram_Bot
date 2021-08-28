@@ -6,22 +6,17 @@ settings = require('./settings.json');
 //import db_handler from './heroku_db_handler';
 //db_handler.setup();
 
-const { Client } = require('pg');
-const client = new Client({
-	connectionString: process.env.DATABASE_URL,
-	ssl: {
-		rejectUnauthorized: false
-	}
-});
-client.connect();
+var pg = require('pg');
 
-client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-	if (err) throw err;
-	for (let row of res.rows) {
-	  console.log(JSON.stringify(row));
-	}
-	client.end();
+
+pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+   console.log(err+"!!!!!!!!!!!!!!!");
+  client.query('SELECT * FROM your_table', function(err, result) {
+    done();
+    if(err) return console.error(err);
+    console.log(result.rows);
   });
+});
 
 
 const bot = new Telegraf(process.env.bot_token);
