@@ -3,8 +3,27 @@ const {Telegraf} = require('telegraf');
 const CronJob = require('cron').CronJob;
 const moment = require('moment');
 settings = require('./settings.json');
-import db_handler from './heroku_db_handler';
-db_handler.setup();
+//import db_handler from './heroku_db_handler';
+//db_handler.setup();
+
+const { Client } = require('pg');
+const client = new Client({
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false
+	}
+});
+client.connect();
+
+client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+	if (err) throw err;
+	for (let row of res.rows) {
+	  console.log(JSON.stringify(row));
+	}
+	client.end();
+  });
+
+
 const bot = new Telegraf(process.env.bot_token);
 var job = null;
 bot.telegram.setMyCommands(settings.commands,{type:'all_chat_administrators'});
