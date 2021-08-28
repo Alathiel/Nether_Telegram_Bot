@@ -3,7 +3,8 @@ const {Telegraf} = require('telegraf');
 const CronJob = require('cron').CronJob;
 const moment = require('moment');
 settings = require('./settings.json');
-
+import db_handler from './heroku_db_handler';
+db_handler.setup();
 const bot = new Telegraf(process.env.bot_token);
 var job = null;
 bot.telegram.setMyCommands(settings.commands,{type:'all_chat_administrators'});
