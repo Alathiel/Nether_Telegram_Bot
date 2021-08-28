@@ -3,11 +3,10 @@ const {Telegraf} = require('telegraf');
 const CronJob = require('cron').CronJob;
 const moment = require('moment');
 settings = require('./settings.json');
-import db_handler from './heroku_db_handler';
-db_handler.setup();
+
 const bot = new Telegraf(process.env.bot_token);
 var job = null;
-bot.telegram.setMyCommands(settings.commands,{type:'all_chat_administrators'});
+
 bot.command('start', (ctx) => {
 	send_urls(ctx,null, 'Hello, Welcome to Nether Help bot');
 }) 
@@ -41,7 +40,7 @@ bot.command('mute', async function(ctx){
 			"can_invite_users": false,
 			"can_pin_messages": false
 		}
-
+		
 		try{
 		const date = ctx.update.message.date;
 			release = moment.unix(date).add(12,'hour');
