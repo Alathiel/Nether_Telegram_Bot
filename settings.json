@@ -1,12 +1,13 @@
 {
-	"commands":[		//bot commands 
+	"commands":[
 		{"command":"info", "description":"insert description here"},
 		{"command":"info_pvt", "description":"insert description here"},
 		{"command":"cron", "description":"insert description here"},
-		{"command":"mute", "description":"insert description here"}
+		{"command":"mute", "description":"insert description here"},
+		{"command":"price", "description":"insert description here"}
 	],
 
-	"delete_time" : 5, //after how much seconds the message will be deleted
+	"delete_time" : 5,
 
 	"urls":[
 		{
@@ -47,7 +48,7 @@
 		}
 	],
 
-	"blacklist":[	//words banned 
+	"blacklist":[ 
 		"hi",
 		"hello",
 		"nice project",

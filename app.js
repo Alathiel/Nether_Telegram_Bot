@@ -3,6 +3,7 @@ const {Telegraf} = require('telegraf');
 const CronJob = require('cron').CronJob;
 const moment = require('moment');
 settings = require('./settings.json');
+const request = require('request');
 
 const bot = new Telegraf(process.env.bot_token);
 var job = null;
@@ -24,6 +25,23 @@ bot.command('cron', async function(ctx){
 	if(ctx.chat.type !== 'private' && (role.status == "administrator" || role.status === "creator"))
 		cron(ctx);
 	
+})
+
+bot.command('price', async function(ctx){
+	request('https://api.coingecko.com/api/v3/coins/nether/tickers', { json: true }, (err, res, body) => {
+		if(err){
+			return console.error(err); 
+		}
+		try{
+			let message = '';
+			for(var elem in body.tickers){
+				message += 'current price NTR/'+body.tickers[elem].target+' on '+ body.tickers[elem].market.name + ': '+body.tickers[elem].converted_last.usd+' USDT\n';
+			}
+			bot.telegram.sendMessage(ctx.chat.id, message)
+		}catch(err){
+			console.error(err);
+		}
+	});
 })
 
 bot.command('mute', async function(ctx){
