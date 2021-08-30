@@ -7,6 +7,7 @@ const request = require('request');
 
 const bot = new Telegraf(process.env.bot_token);
 var job = null;
+bot.telegram.setMyCommands(settings.commands,{type:'all_chat_administrators'});
 
 bot.command('start', (ctx) => {
 	send_urls(ctx,null, 'Hello, Welcome to Nether Help bot');
