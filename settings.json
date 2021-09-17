@@ -8,43 +8,24 @@
 	],
 
 	"delete_time" : 5,
+	"columns" : 3,
 
 	"urls":[
 		{
-			"text" : "Netheru",
-			"url" : "https://netheru.io/it/home/"
+			"text" : "insert text here",
+			"url" : "www.google.com"
 		},
 		{
-			"text" : "White Paper",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
+			"text" : "insert text here",
+			"url" : "www.google.com"
 		},
 		{
-			"text" : "aaa",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
+			"text" : "insert text here",
+			"url" : "www.google.com"
 		},
 		{
-			"text" : "bbb",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
-		},
-		{
-			"text" : "ccc",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
-		},
-		{
-			"text" : "ccc",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
-		},
-		{
-			"text" : "ccc",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
-		},
-		{
-			"text" : "ccc",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
-		},
-		{
-			"text" : "ccc",
-			"url" : "https://netheru.io/wp-content/uploads/2021/05/Nethers-Whitepaper-Moble-5.pdf"
+			"text" : "insert text here",
+			"url" : "www.google.com"
 		}
 	],
 

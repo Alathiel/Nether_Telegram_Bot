@@ -161,40 +161,20 @@ async function send_urls(ctx, member = null, new_message = null, private = false
 
 function load_list(urls){
 	var list = [];
-	var list_app = [];
+	let list_app = [];
 	var i = 0;
 	urls.forEach(element => {
-		if(i == 0){
-			list.push([{
-				text: element.text,
-				url: element.url
-			}]);
-			i++;
-		}
-		else if(i > 0 && i <= 3){
+		if(i >= 0 && i < settings.columns){
 			list_app.push({
 				text: element.text,
 				url: element.url
 			})
 			i++;
 		}
-		else if(i > 4 && i <= 5){
-			list_app.push({
-				text: element.text,
-				url: element.url
-			})
-			i++;
-		}
-		else if(i > 6 && i <= 7){
-			list_app.push({
-				text: element.text,
-				url: element.url
-			})
-			i++;
-		}
-		else if(i >= 4){
+		else{
 			list.push(list_app);
 			list_app = [];
+			i = 0;
 			list_app.push({
 				text: element.text,
 				url: element.url
